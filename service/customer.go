@@ -35,8 +35,7 @@ func (c *customerService) GetCustomer(id int) (m *model.Customer, err error) {
 	return c.getCustomerById(id)
 }
 func (c *customerService) GetAllCustomer(limit int, offset int) (model []model.Customer, err error) {
-	model, err = c.custRepository.FindAll(limit, offset)
-	return
+	return c.custRepository.FindAll(limit, offset)
 }
 
 func (c *customerService) CreateCustomer(cust *model.Customer) error {
