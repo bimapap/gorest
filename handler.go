@@ -56,6 +56,32 @@ func (s *CustomerHandler) Get(w http.ResponseWriter, r *http.Request) {
 	s.responseBuilder(w, customer)
 }
 
+func (s *CustomerHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	Limit, err := strconv.Atoi(vars["limit"])
+	Offset, err := strconv.Atoi(vars["offset"])
+
+	if err != nil {
+		errMsg := fmt.Sprintf("Response builder error : %v", err)
+
+		w.WriteHeader(http.StatusBadRequest)
+		s.responseBuilder(w, errMsg)
+		return
+	}
+	customer, err := s.custService.GetAllCustomer(Limit, Offset)
+	if err != nil {
+		errMsg := fmt.Sprintf("Get Customer error : %v", err)
+
+		w.WriteHeader(http.StatusBadRequest)
+		s.responseBuilder(w, errMsg)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	s.responseBuilder(w, customer)
+}
+
 func (s *CustomerHandler) Post(w http.ResponseWriter, r *http.Request) {
 
 	var cust = &model.Customer{}

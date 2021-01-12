@@ -1,12 +1,15 @@
 package service
 
 import (
+	"time"
+
 	"github.com/bimapap/gorest/model"
 	"github.com/bimapap/gorest/repository"
 )
 
 type CustomerService interface {
 	GetCustomer(id int) (m *model.Customer, err error)
+	GetAllCustomer(limit int, offset int) (model []model.Customer, err error)
 	CreateCustomer(cust *model.Customer) error
 	UpdateCustomer(id int, cust *model.Customer) error
 	DeleteCustomer(id int) error
@@ -31,8 +34,13 @@ func (c *customerService) getCustomerById(id int) (m *model.Customer, err error)
 func (c *customerService) GetCustomer(id int) (m *model.Customer, err error) {
 	return c.getCustomerById(id)
 }
+func (c *customerService) GetAllCustomer(limit int, offset int) (model []model.Customer, err error) {
+	model, err = c.custRepository.FindAll(limit, offset)
+	return
+}
 
 func (c *customerService) CreateCustomer(cust *model.Customer) error {
+	cust.CreatedAt = time.Now()
 	return c.custRepository.Create(cust)
 }
 
@@ -43,8 +51,9 @@ func (c *customerService) UpdateCustomer(id int, cust *model.Customer) error {
 	}
 
 	var updateValue = model.Customer{
-		Name:    cust.Name,
-		Address: cust.Address,
+		Name:      cust.Name,
+		Address:   cust.Address,
+		UpdatedAt: time.Now(),
 	}
 
 	return c.custRepository.Update(existingCustomer, updateValue)
@@ -56,5 +65,9 @@ func (c *customerService) DeleteCustomer(id int) error {
 		return err
 	}
 
-	return c.custRepository.Delete(existingCustomer)
+	var updateValue = model.Customer{
+		DeletedAt: time.Now(),
+	}
+
+	return c.custRepository.Delete(existingCustomer, updateValue)
 }

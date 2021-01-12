@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"time"
-
 	"github.com/bimapap/gorest/model"
 	"gorm.io/gorm"
 )
@@ -10,8 +8,9 @@ import (
 type CustomerRepository interface {
 	Create(cust *model.Customer) error
 	Update(cust *model.Customer, updateValue interface{}) error
-	Delete(cust *model.Customer) error
+	Delete(cust *model.Customer, updateValue interface{}) error
 	FindOne(id int) (*model.Customer, error)
+	FindAll(limit int, offset int) ([]model.Customer, error)
 }
 
 type customerRepository struct {
@@ -23,9 +22,6 @@ func NewCustomerRepository(dbConnection *gorm.DB) CustomerRepository {
 }
 
 func (c *customerRepository) Create(cust *model.Customer) error {
-	cust.CreatedAt = time.Now()
-	cust.UpdatedAt = nil
-	cust.DeletedAt = nil
 	return c.dbConnection.Create(cust).Error
 }
 
@@ -36,11 +32,19 @@ func (c *customerRepository) FindOne(id int) (cust *model.Customer, err error) {
 	return
 }
 
+func (c *customerRepository) FindAll(limit int, offset int) (cust []model.Customer, err error) {
+	cust = []model.Customer{}
+	err = c.dbConnection.Debug().Limit(limit).Offset(offset).Find(&cust).Error
+	return
+}
+
 func (c *customerRepository) Update(cust *model.Customer, updateValue interface{}) error {
-	cust.UpdatedAt = &time.Time{}
+	return c.dbConnection.Model(cust).Updates(updateValue).Error
+}
+func (c *customerRepository) Delete(cust *model.Customer, updateValue interface{}) error {
 	return c.dbConnection.Model(cust).Updates(updateValue).Error
 }
 
-func (c *customerRepository) Delete(cust *model.Customer) error {
-	return c.dbConnection.Delete(cust).Error
-}
+// func (c *customerRepository) Delete(cust *model.Customer) error {
+// 	return c.dbConnection.Delete(cust).Error
+// }
