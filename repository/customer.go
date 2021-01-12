@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/bimapap/gorest/model"
 	"gorm.io/gorm"
 )
@@ -21,6 +23,9 @@ func NewCustomerRepository(dbConnection *gorm.DB) CustomerRepository {
 }
 
 func (c *customerRepository) Create(cust *model.Customer) error {
+	cust.CreatedAt = time.Now()
+	cust.UpdatedAt = nil
+	cust.DeletedAt = nil
 	return c.dbConnection.Create(cust).Error
 }
 
@@ -32,6 +37,7 @@ func (c *customerRepository) FindOne(id int) (cust *model.Customer, err error) {
 }
 
 func (c *customerRepository) Update(cust *model.Customer, updateValue interface{}) error {
+	cust.UpdatedAt = &time.Time{}
 	return c.dbConnection.Model(cust).Updates(updateValue).Error
 }
 
