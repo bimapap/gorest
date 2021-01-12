@@ -29,7 +29,7 @@ func customerRouter(r *mux.Router) {
 	var custService = service.NewCustomerService(custRepository)
 	var custHandler = NewCustomerHandler(custService)
 
-	r.HandleFunc("/customers:{limi}", custHandler.GetAll).Queries("limit", "{limit}", "offset", "{offset}").Methods(http.MethodGet)
+	r.HandleFunc("/customers", custHandler.GetAll).Queries("limit", "{limit}", "offset", "{offset}").Methods(http.MethodGet)
 	r.HandleFunc("/customers/{id}", custHandler.Get).Methods(http.MethodGet)
 	r.HandleFunc("/customers", custHandler.Post).Methods(http.MethodPost)
 	r.HandleFunc("/customers/{id}", custHandler.Put).Methods(http.MethodPut)
