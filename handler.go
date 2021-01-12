@@ -3,15 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/pushm0v/gorest/model"
-	"github.com/pushm0v/gorest/service"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/bimapap/gorest/model"
+	"github.com/bimapap/gorest/service"
+	"github.com/gorilla/mux"
 )
 
-type CustomerHandler struct{
+type CustomerHandler struct {
 	custService service.CustomerService
 }
 

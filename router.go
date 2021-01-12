@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/pushm0v/gorest/model"
-	"github.com/pushm0v/gorest/repository"
-	"github.com/pushm0v/gorest/service"
 	"log"
 	"net/http"
+
+	"github.com/bimapap/gorest/model"
+	"github.com/bimapap/gorest/repository"
+	"github.com/bimapap/gorest/service"
+	"github.com/gorilla/mux"
 )
 
 func RestRouter() *mux.Router {
@@ -34,4 +35,3 @@ func customerRouter(r *mux.Router) {
 	r.HandleFunc("/customers/{id}", custHandler.Delete).Methods(http.MethodDelete)
 	r.HandleFunc("/", custHandler.NotFound)
 }
-

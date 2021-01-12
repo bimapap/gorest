@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/pushm0v/gorest/model"
-	"github.com/pushm0v/gorest/repository"
+	"github.com/bimapap/gorest/model"
+	"github.com/bimapap/gorest/repository"
 )
 
 type CustomerService interface {
@@ -13,7 +13,7 @@ type CustomerService interface {
 }
 
 type customerService struct {
-	customers map[int]*model.Customer
+	customers      map[int]*model.Customer
 	custRepository repository.CustomerRepository
 }
 
@@ -24,7 +24,7 @@ func NewCustomerService(custRepository repository.CustomerRepository) CustomerSe
 }
 
 func (c *customerService) getCustomerById(id int) (m *model.Customer, err error) {
-	m,err = c.custRepository.FindOne(id)
+	m, err = c.custRepository.FindOne(id)
 	return
 }
 
@@ -58,5 +58,3 @@ func (c *customerService) DeleteCustomer(id int) error {
 
 	return c.custRepository.Delete(existingCustomer)
 }
-
-
