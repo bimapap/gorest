@@ -28,13 +28,12 @@ func (c *customerRepository) Create(cust *model.Customer) error {
 func (c *customerRepository) FindOne(id int) (cust *model.Customer, err error) {
 	cust = &model.Customer{}
 	err = c.dbConnection.First(cust, id).Error
-
 	return
 }
 
 func (c *customerRepository) FindAll(limit int, offset int) (cust []model.Customer, err error) {
 	cust = []model.Customer{}
-	err = c.dbConnection.Debug().Limit(limit).Offset(offset).Find(&cust).Error
+	err = c.dbConnection.Limit(limit).Offset(offset).Find(&cust).Error
 	return
 }
 
